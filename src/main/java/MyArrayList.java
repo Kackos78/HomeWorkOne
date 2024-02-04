@@ -1,25 +1,24 @@
 import java.util.*;
 
 public class MyArrayList<E> implements List<E> {
-    private int capacity = 0;
     private int size = 0;
     private Object[] array;
 
-    public MyArrayList(int capacity) {
-        this.capacity = capacity;
-        array = new Object[capacity];
+    public MyArrayList(int size) {
+        this.size = size;
+        array = new Object[size];
     }
 
     public MyArrayList(Object[] array){
         this.array = array;
         this.size = array.length;
-        this.capacity = array.length;
 
     }
-    private void increaseCapacity(){
-        capacity = capacity * 3 / 2 + 1;
-        Object[] newArray = new Object[capacity];
-        for (int i = 0; i < size; i++) {
+    private void increaseSize(int increaseTo){
+        int previousSize = size;
+        size = size + increaseTo;
+        Object[] newArray = new Object[size];
+        for (int i = 0; i < previousSize; i++) {
             newArray[i] = array[i];
             array[i] = null;
         }
@@ -81,18 +80,19 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean add(Object o) {
-        if (size >= capacity){
-            increaseCapacity();
-        }
-        array[size + 1] = o;
-        size ++;
+        increaseSize(1);
+        array[size-1] = o;
         return true;
+    }
+    protected void treamToSize(){
+        array = Arrays.copyOfRange(array,0,size);
     }
 
     protected void shiftToLeft(int indexOfRemove){
         size--;
         System.arraycopy(array, indexOfRemove + 1, array, indexOfRemove, size - indexOfRemove);
-        array[size+1] = null;
+        array[size] = null;
+        treamToSize();
     }
 
     @Override
@@ -113,10 +113,6 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean addAll(Collection c) {
-        if (size >= capacity){
-            increaseCapacity();
-            capacity = capacity + c.size();
-        }
         for (Object el: c) {
             add(el);
         }
@@ -125,10 +121,6 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection c) {
-        if (size >= capacity){
-            increaseCapacity();
-            capacity = capacity + c.size();
-        }
         Object[] lastPartOfArray = new Object[size - index];
         System.arraycopy(array, index, lastPartOfArray, 0 , size-index);
         size = index;
@@ -136,6 +128,7 @@ public class MyArrayList<E> implements List<E> {
             add(el);
         }
         addAll(List.of(lastPartOfArray));
+
         return true;
     }
 
@@ -158,12 +151,16 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public void add(int index, Object element) {
-
+        Object[] lastPartOfArray = new Object[size - index];
+        System.arraycopy(array, index, lastPartOfArray, 0 , size-index);
+        size = index;
+        add(element);
+        addAll(List.of(lastPartOfArray));
     }
 
     @Override
     public E remove(int index) {
-            Object removedObject = new Object();
+            Object removedObject;
             removedObject = array[index];
             shiftToLeft(index);
             return (E) removedObject;
