@@ -19,7 +19,8 @@ class MyArrayListTest {
         System.out.println("==========TEST size STARTED==========");
         Object[] array = {1,2,3,4,5,6,7,8,9,10};
         MyArrayList<Integer> myArrayList = new MyArrayList<>(array);
-        Assertions.assertEquals(10, myArrayList.size());
+        myArrayList.add(11);
+        Assertions.assertEquals(11, myArrayList.size());
     }
 
     @Test
