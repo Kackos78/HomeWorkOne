@@ -158,6 +158,8 @@ public class MyArrayList<E> implements List<E> {
 
     /*
     Метод удаления объекта
+    @param - Object o, ообъект для удаления
+    @raturn - boolean, true при удачном удалении
      */
     @Override
     public boolean remove(Object o) {
@@ -174,54 +176,79 @@ public class MyArrayList<E> implements List<E> {
         }
         return false;
     }
-
+/*
+Метод добавления в конец массива коллекции
+@param - Collection c, коллекция для добавления
+@raturn - boolean, true при удачном удалении
+ */
     @Override
     public boolean addAll(Collection c) {
         for (Object el: c) {
-            add(el);
+            add(el);// Вызов добавления одного элемента
         }
         return true;
     }
-
+/*
+Метод добавления коллекции по индексу, со сдвигом массива влево
+@param - int index, Collection c
+@return - boolean true при удачном удалении
+ */
     @Override
     public boolean addAll(int index, Collection c) {
-        Object[] lastPartOfArray = new Object[size - index];
-        System.arraycopy(array, index, lastPartOfArray, 0 , size-index);
-        size = index;
+        Object[] lastPartOfArray = new Object[size - index];// Переменная для правой части массива
+        System.arraycopy(array, index, lastPartOfArray, 0 , size-index); // Создание копии правой части
+        size = index;// Снижение длинны массива т.к. метод add() добавляет +1 к size при каждой итерации
         for (Object el: c) {
-            add(el);
+            add(el); // Добавление всех элементов по одному в коллекцию
         }
-        addAll(List.of(lastPartOfArray));
+        addAll(List.of(lastPartOfArray)); // Рекурсивно добавление правой части (глубина рекурсии - 1)
 
         return true;
     }
-
+/*Метод полной очистки массива
+ */
     @Override
     public void clear() {
         array = null;
     }
-
+    /*
+    Метод получения значения по интексу
+    @param - int index
+    @return - E
+     */
     @Override
     public E get(int index) {
          return (E) array[index];
     }
-
+/*
+Метод замены элемента по индексу, и возврата старого значения
+@param - int index (Индекс элемента для замены) Object element (Новый элемент)
+@return - Object - Старое значение
+ */
     @Override
     public Object set(int index, Object element) {
         Object removedElement = array[index];
         array[index] = element;
         return removedElement;
     }
+/*
+Метод добавления элемента по индексу, со сдвигом вправо
+@param - int index (Индекс элемента для замены) Object element (Новый элемент)
 
+ */
     @Override
     public void add(int index, Object element) {
-        Object[] lastPartOfArray = new Object[size - index];
-        System.arraycopy(array, index, lastPartOfArray, 0 , size-index);
-        size = index;
+        Object[] lastPartOfArray = new Object[size - index]; // Переменная для правой части массива
+        System.arraycopy(array, index, lastPartOfArray, 0 , size-index);// Создание копии правой части
+        size = index;// Снижение длинны массива т.к. метод add() добавляет +1 к size при каждой итерации
         add(element);
-        addAll(List.of(lastPartOfArray));
+        addAll(List.of(lastPartOfArray));// Рекурсивно добавление правой части (глубина рекурсии - 1)
     }
-
+/*
+Метод удаления элемента по индекси и его возврат
+@param - int index - Индекс нужного элемента
+@return - E - Удаленный элемент
+ */
     @Override
     public E remove(int index) {
             Object removedObject;
@@ -229,7 +256,12 @@ public class MyArrayList<E> implements List<E> {
             shiftToLeft(index);
             return (E) removedObject;
     }
-
+/*
+Поиск по элементу 0(n), возврат первого вхождения
+@param - Object o
+@return - int-индекс элемента
+При неудачном поиске пробрасывает RuntimeException()
+ */
     @Override
     public int indexOf(Object o) {
         for (int i = 0; i < size; i++) {
@@ -239,6 +271,13 @@ public class MyArrayList<E> implements List<E> {
         }
         throw new RuntimeException();
     }
+    /*
+Поиск по элементу 0(n), возврат последнего вхождения
+@param - Object o
+@return - int-индекс элемента
+При неудачном поиске пробрасывает RuntimeException()
+ */
+
     @Override
     public int lastIndexOf(Object o) {
         for (int i = size; i >= 0; i--) {
@@ -278,6 +317,7 @@ public class MyArrayList<E> implements List<E> {
     public boolean containsAll(Collection c) {
         return false;
     }
+
 
     @Override
     public Object[] toArray(Object[] a) {

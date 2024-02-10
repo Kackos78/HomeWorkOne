@@ -22,7 +22,6 @@ class QuickSortTest {
         MyArrayList<Integer> myArrayList = new MyArrayList<>(array);
         QuickSort<Integer> quickSort = new QuickSort<>();
         quickSort.quicksort(myArrayList, 0, myArrayList.size()-1);
-        System.out.println(myArrayList);
 
         Assertions.assertArrayEquals(expectedArray, myArrayList.toArray());
     }}
