@@ -15,14 +15,14 @@ import java.util.*;
 
 public class MyArrayList<E> implements List<E> {
     private int size = 0;
-    private final int DEFAULTSIZE = 0;
+    private final int DEFAULT_SIZE = 0;
     private Object[] array;
 
     /*
     Конструктор для создания экземпляра, по уполчанию создаёт массив с 0-м размером
      */
     public MyArrayList() {
-        this.size = DEFAULTSIZE;
+        this.size = DEFAULT_SIZE;
         array = new Object[size];
     }
     /*
@@ -70,10 +70,7 @@ public class MyArrayList<E> implements List<E> {
  */
     @Override
     public boolean isEmpty() {
-        if (size == 0){
-            return true;
-        }
-        return false;
+        return size == 0;
     }
     /*
     Поиск наличия элемента в массиве
@@ -82,8 +79,12 @@ public class MyArrayList<E> implements List<E> {
      */
     @Override
     public boolean contains(Object o) {
+        if (o == null) {
+            throw new NullPointerException();
+        }
+
         for (Object el: array) {
-            if (el == o){
+            if (o.equals(el)) {
                 return true;
             }
         }
@@ -141,7 +142,7 @@ public class MyArrayList<E> implements List<E> {
     Метод снижения размера массива до минимума (убирает null элементы в конце массива),
     для экономии места в памяти.
      */
-    protected void treamToSize(){
+    protected void trimToSize(){
         array = Arrays.copyOfRange(array,0,size);
     }
 
@@ -153,7 +154,7 @@ public class MyArrayList<E> implements List<E> {
         size--;
         System.arraycopy(array, indexOfRemove + 1, array, indexOfRemove, size - indexOfRemove);
         array[size] = null;
-        treamToSize();
+        trimToSize();
     }
 
     /*
@@ -166,7 +167,7 @@ public class MyArrayList<E> implements List<E> {
         if(size == 0){return false;}
         int i;
         for (i = 0; i < size; i++) {
-            if (array[i].equals(o)){ // Проверка на наличие объекта
+            if (array[i].equals(o)){ // Проверка на наличие объекта если элемент массив null - NPE
                 break;
             }
         }
@@ -265,7 +266,7 @@ public class MyArrayList<E> implements List<E> {
     @Override
     public int indexOf(Object o) {
         for (int i = 0; i < size; i++) {
-            if (array[i].equals(o)) {
+            if (array[i].equals(o)) { // NPE
                 return i;
             }
         }
