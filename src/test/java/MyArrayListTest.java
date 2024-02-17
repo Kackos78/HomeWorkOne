@@ -26,8 +26,7 @@ class MyArrayListTest {
     @Test
     void isEmpty() {
         System.out.println("==========TEST isEmpty STARTED==========");
-        MyArrayList myArrayList = new MyArrayList<>(0);
-        Assertions.assertTrue(myArrayList.isEmpty());
+        Assertions.assertTrue( new MyArrayList<>(0).isEmpty());
     }
 
     @Test
@@ -72,7 +71,7 @@ class MyArrayListTest {
     @Test
     void add() {
         System.out.println("==========TEST add STARTED==========");
-        Integer[] array = {1,2,3,4,5,6,7,8,9,10};
+        Integer[] array = {1,2,3,4,5,6,7,8,9,10}; // лучше тестить с одним типом, например Object[] и запихивать инициализацию в BeforeEach
         MyArrayList<Integer> myArrayList = new MyArrayList<>(array);
         myArrayList.add(12);
         myArrayList.add(999);
